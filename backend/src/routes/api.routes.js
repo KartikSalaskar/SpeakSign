@@ -1,11 +1,15 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Save temp files here
 
-const { recognize } = require("../controllers/recognize.controller");
-const { chat } = require("../controllers/chat.controller");
+const chatController = require('../controllers/chat.controller');
+const recognizeController = require('../controllers/recognize.controller');
 
-// temporary (remove authMiddleware)
-router.post("/recognize", recognize);
-router.post("/chat", chat);
+// Chat Route
+router.post('/chat', chatController.chat);
+
+// Recognition Route (Note the 'upload.single' middleware!)
+router.post('/recognize', upload.single('image'), recognizeController.recognize);
 
 module.exports = router;
